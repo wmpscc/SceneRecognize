@@ -13,6 +13,11 @@
 - 使用核为1x1的Conv2D替换全连接层。
 - 调整网络深度，以适应当前数据集
 
+# 设计原则
+- 对于相同的尺寸的输出特征图谱，每层必须含有相同数量的过滤器
+- 如果特征图谱的尺寸减半，则过滤器的数量必须翻倍，以保持每层的时间复杂度
+- 直接通过卷积层（stride=2）进行下采样，网络末端以全局的均值池化层结束
+
 # 关键代码
 ``` Python
 net = slim.batch_norm(net, is_training=True)
@@ -32,3 +37,6 @@ net = slim.batch_norm(net, is_training=True)
     # Use conv2d instead of fully_connected layers.
     net = slim.conv2d(net, 80, [1, 1])
 ```
+
+# 参考文献
+- [图像识别领域的深度残差学习](https://www.jianshu.com/p/f71ba99157c7)
